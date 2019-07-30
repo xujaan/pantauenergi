@@ -1,2 +1,2 @@
-# pantauenergi-backend
-Backend dari sistem energi monitoring (Pantau Energi)
+# pantauenergi
+Aplikasi monitoring energi listrik (Beta)
