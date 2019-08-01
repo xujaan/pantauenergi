@@ -1,0 +1,38 @@
+{
+  "name": "pantauenergi",
+  "version": "1.0.0",
+  "description": "Aplikasi monitoring energi listrik (Beta)",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xujaan/pantauenergi.git"
+  },
+  "keywords": [
+    "Monitoring",
+    "Energy"
+  ],
+  "author": "Ahmad Akhus Syuj'an",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "3.0.0",
+    "body-parser": "^1.17.2",
+    "cors": "^2.8.4",
+    "ejs": "^2.6.2",
+    "express": "^4.16.3",
+    "jsonwebtoken": "^7.4.2",
+    "mysql": "^2.14.1",
+    "mysql2": "^1.6.1",
+    "nodemon": "^1.18.3",
+    "sequelize": "^6.0.0",
+    "socket.io": "latest",
+    "http": "latest"
+  },
+  "bugs": {
+    "url": "https://github.com/xujaan/pantauenergi/issues"
+  },
+  "homepage": "https://github.com/xujaan/pantauenergi#readme"
+}

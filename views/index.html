@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
+    <link rel="icon" type="image/png" href="assets/img/favicon.png">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        Pantau Energi
+    </title>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
+        name='viewport' />
+    <!--     Fonts and icons     -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+        integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <!-- CSS Files -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="assets/css/paper-dashboard.css?v=2.0.0" rel="stylesheet" />
+    <!-- CSS Just for demo purpose, don't include it in your project -->
+    <link href="assets/demo/demo.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="wrapper">
+        <div id="app">
+            <div v-if="login"></div>
+            <div class="sidebar" data-color="black" data-active-color="danger">
+                <div class="logo">
+                    <a href="#" class="ml-2 simple-text logo-normal" style="font-size: 14px;">
+                        <b>Pantau Energi Sederhana</b>
+                    </a>
+                </div>
+                <div class="sidebar-wrapper">
+                    <ul class="nav">
+                        <li>
+                            <a href="#" @click="halaman='aktifitas'">
+                                <i class="nc-icon nc-chart-bar-32"></i>
+                                <p>Aktifitas</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" @click="halaman='datalog'">
+                                <i class="nc-icon nc-tile-56"></i>
+                                <p>Data</p>
+                            </a>
+                        </li>
+                        <!-- <li>
+                            <a href="#" @click="halaman='spot'">
+                                <i class="nc-icon nc-map-big"></i>
+                                <p>Spot</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" @click="halaman='pengaturan'">
+                                <i class="nc-icon nc-settings-gear-65"></i>
+                                <p>Pengaturan</p>
+                            </a>
+                        </li> -->
+                    </ul>
+                </div>
+            </div>
+            <div class="main-panel">
+                <!-- <nav class="navbar navbar-expand-lg navbar-absolute fixed-top">
+                    <div class="container-fluid">
+                        <div class="navbar-wrapper">
+                            <div class="navbar-toggle">
+                                <button type="button" class="navbar-toggler">
+                                    <span class="navbar-toggler-bar bar1"></span>
+                                    <span class="navbar-toggler-bar bar2"></span>
+                                    <span class="navbar-toggler-bar bar3"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </nav> -->
+                <div class="content">
+                    <keep-alive>
+                        <component :is="halaman" transition="fade" transition-mode="out-in"></component>
+                    </keep-alive>
+                </div>
+            </div>
+        </div>
+    </div>
+    <template id="aktifitas">
+        <div>
+            <div class="dropdown float-right">
+                <select class="form-control" id='spotreal' class="btn btn-secondary">
+                    <option v-for="opti in optionspot" v-bind:value="opti.value">
+                        {{ opti.text }}
+                    </option>
+                </select>
+            </div>
+            <div class="d-flex flex-wrap flex-md-nowrap align-items-center pt-2 pb-2 mb-3 border-bottom">
+                <h1 class="h2 ml-4">Aktifitas</h1>
+            </div>
+            <div class="row">
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="card card-stats">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-5 col-md-4">
+                                    <div class="icon-big text-center icon-warning ml-5">
+                                        <i :class="icontegangan"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-md-8">
+                                    <div class="numbers mr-2">
+                                        <p class="card-category">Tegangan</p>
+                                        <p class="card-title">{{ totaltegangan }}
+                                            <p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer ">
+                            <hr>
+                            <div class="stats float-right">
+                                <i class="fa fa-refresh"></i> Voltage
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="card card-stats">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-5 col-md-4">
+                                    <div class="icon-big text-center icon-warning ml-5">
+                                        <i :class="iconarus"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-md-8">
+                                    <div class="numbers mr-2">
+                                        <p class="card-category">Arus</p>
+                                        <p class="card-title">{{ totalarus }}
+                                            <p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer ">
+                            <hr>
+                            <div class="stats float-right">
+                                <i class="fa fa-calendar-o"></i> Ampere
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="card card-stats">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-5 col-md-4">
+                                    <div class="icon-big text-center icon-warning ml-5">
+                                        <i :class="icondaya"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-md-8">
+                                    <div class="numbers mr-2">
+                                        <p class="card-category">Daya</p>
+                                        <p class="card-title">{{ totaldaya }}
+                                            <p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer ">
+                            <hr>
+                            <div class="stats float-right">
+                                <i class="fa fa-clock-o"></i>Watt
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="card card-stats">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-5 col-md-4">
+                                    <div class="icon-big text-center icon-warning">
+                                        <i class="nc-icon nc-money-coins text-success"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-md-8">
+                                    <div class="numbers mr-2">
+                                        <p class="card-category">Biaya</p>
+                                        <p class="card-title"></p>{{ harga }}
+                                        <p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer ">
+                            <hr>
+                            <div class="stats float-right">
+                                <i class="fa fa-refresh"></i>Rupiah
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <canvas class="my-4 w-100" id="myChartC" width="900" height="380"></canvas>
+                </div>
+            </div>
+
+        </div>
+    </template>
+    <template id="datalog">
+        <div>
+            <div class="d-flex flex-wrap flex-md-nowrap align-items-center pt-2 pb-2 mb-3 border-bottom">
+                <h1 class="h2 ml-4">Log Data</h1>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="mb-1">Filter :</p>
+                            <div class="row">
+                                <div class="col-3">
+                                    <div class="form-group">
+                                        <select class="form-control" id='spotval'>
+                                            <option v-for="opt in optionspot" v-bind:value="opt.value">
+                                                {{ opt.text }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <select v-model="selected" class="form-control">
+                                            <option v-for="option in options" v-bind:value="option.value">
+                                                {{ option.text }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <select name="" id="tampil" class="form-control">
+                                            <option value="">Semua</option>
+                                            <option value="hari">Perhari</option>
+                                            <option value="minggu">Perminggu</option>
+                                            <option value="bulan">Perbulan</option>
+                                            <option value="tahun">Pertahun</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-1">
+                                    <button class="btn btn-sm btn-info" v-on:click="log"><i
+                                            class="fa fa-sync-alt"></i></button>
+                                </div>
+                            </div>
+                            <p class="mt-2 mb-1">Periode :</p>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="">Awal</span>
+                                        </div>
+                                        <input type="date" class="form-control" id="tanggalawal" v-model="selected[0]">
+                                        <input type="time" class="form-control" id="waktuawal" value="00:00">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="">Akhir</span>
+                                        </div>
+                                        <input type="date" class="form-control" id="tanggalakhir" v-model="selected[1]"
+                                            v-on:change="log">
+                                        <input type="time" class="form-control" id="waktuakhir" value="23:59"
+                                            v-on:change="log">
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <hr>
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active text-info" id="grafik-tab" data-toggle="tab" href="#grafik"
+                                role="tab" aria-controls="grafik" aria-selected="false"><b>Grafik</b></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-info" id="table-tab" data-toggle="tab" href="#table" role="tab"
+                                aria-controls="table" aria-selected="true"><b>Tabel</b></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-info" id="biaya-tab" data-toggle="tab" href="#biaya" role="tab"
+                                aria-controls="table" aria-selected="true"><b>Biaya</b></a>
+                        </li>
+                        <!-- <li class="nav-item">
+                            <a class="nav-link text-info" id="prediksi-tab" data-toggle="tab" href="#prediksi"
+                                role="tab" aria-controls="table" aria-selected="true"><b>Prediksi</b></a>
+                        </li> -->
+                    </ul>
+
+                    <div class="tab-content" id="myTabContent">
+
+                        <div class="tab-pane fade show active" id="grafik" role="tabpanel" aria-labelledby="grafik-tab">
+                            <div class="card">
+                                <div class="card-body">
+                                    <canvas id="line-chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade " id="table" role="tabpanel" aria-labelledby="table-tab">
+                            <div class="card">
+                                <div class="card-body">
+
+                                    <table class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr class="bg-info text-light">
+                                                <th>Waktu</th>
+                                                <th>Arus</th>
+                                                <th>Tegangan</th>
+                                                <th>Daya</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="bodytable">
+
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade " id="biaya" role="tabpanel" aria-labelledby="biaya-tab">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="input-group">
+                                        <input type="text" id="hargalistrik" class="form-control"
+                                            placeholder="Harga listrik per-kWh" v-model="hargalistrik">
+                                        <span class="input-group-append">
+                                            <button class="btn btn-danger" v-on:click="biaya">Hitung</button>
+                                        </span>
+                                    </div>
+                                    <div class="pt-2">
+                                        <h4><u>Periode :</u></h4>
+                                        <h3 class="text-danger">{{ periode }}</h3>
+                                        <h4><u>Total kWh :</u></h4>
+                                        <h3 class="text-danger">{{ total }}</h3>
+                                        <h4><u>Total biaya :</u></h4>
+                                        <h3 class="text-danger">{{ harga }}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade " id="prediksi" role="tabpanel" aria-labelledby="prediksi-tab">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h3>Prediksi Bulan Depan</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+    <template id="spot">
+        <div>
+            <div class="d-flex flex-wrap flex-md-nowrap align-items-center pt-2 pb-2 mb-3 border-bottom">
+                <h1 class="h2 ml-4">Spot Sensor</h1>
+            </div>
+            <div class="row">
+                <div class="col-12">
+
+                </div>
+            </div>
+        </div>
+    </template>
+    <template id="pengaturan">
+        <div>
+            <div class="d-flex flex-wrap flex-md-nowrap align-items-center pt-2 pb-2 mb-3 border-bottom">
+                <h1 class="h2 ml-4">Pengaturan</h1>
+            </div>
+            <div class="row">
+                <div class="col-12">
+
+                </div>
+            </div>
+        </div>
+    </template>
+    <template id="login">
+        <div>
+            <div class="d-flex flex-wrap flex-md-nowrap align-items-center pt-2 pb-2 mb-3 border-bottom">
+                <h1 class="h2 ml-4">Login</h1>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    login
+                </div>
+            </div>
+        </div>
+    </template>
+    <!--   Core JS Files   -->
+    <script src="assets/js/core/jquery.min.js"></script>
+    <script src="assets/js/core/popper.min.js"></script>
+    <script src="assets/js/core/bootstrap.min.js"></script>
+    <script src="assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+    <!-- Chart JS -->
+    <script src="assets/js/plugins/chartjs.min.js"></script>
+    <!--  Notifications Plugin    -->
+    <script src="assets/js/plugins/bootstrap-notify.js"></script>
+    <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
+    <script src="assets/js/paper-dashboard.min.js?v=2.0.0" type="text/javascript"></script>
+    <!-- Paper Dashboard DEMO methods, don't include it in your project! -->
+    <script src="assets/demo/demo.js"></script>
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
+    <script src="views/app.js"></script>
+    <!-- <script>
+    $(document).ready(function() {
+      // Javascript method's body can be found in assets/assets-for-demo/js/demo.js
+      demo.initChartsPages();
+    });
+    </script> -->
+</body>
+
+</html>
