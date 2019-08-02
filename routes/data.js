@@ -64,7 +64,18 @@ router.post('/data', (req, res, next) => {
     } else {
         data.create(req.body)
             .then(() => {
-                req.app.io.emit('data', req.body); //socketio
+                var today = new Date();
+                var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                var datasocket = {
+                    // "waktu": new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''),
+                    "waktu": time,
+                    "tegangan": req.body.tegangan,
+                    "arus": req.body.arus,
+                    "daya": req.body.daya
+                }
+                // datasocket.push(req.body)
+                // console.log(datasocket)
+                req.app.io.emit('data', datasocket) //socketio
                 res.send({
                     'status': 'success',
                     'data': null,

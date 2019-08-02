@@ -44,7 +44,8 @@ Vue.component('aktifitas', {
                     params: {
                         awal: this.hariini + " 00:00:00",
                         akhir: this.hariini + " 23:59:59",
-                        spot: spott
+                        spot: spott,
+                        tampil: ""
                     }
                 })
                 .then(response => {
@@ -58,8 +59,29 @@ Vue.component('aktifitas', {
                 });
         },
         // socket
-        realtime() {
-            var datachart;
+        realsocket() {
+            var datachart = {
+                labels: [0],
+                datasets: [{
+                    data: [0],
+                    label: "Tegangan",
+                    borderColor: "#6fc2d0",
+                    backgroundColor: "#d3f9ff",
+                    fill: false
+                }, {
+                    data: [0],
+                    label: "Arus",
+                    borderColor: "#ff8246",
+                    backgroundColor: "#ffc2a5",
+                    fill: false
+                }, {
+                    data: [0],
+                    label: "Daya",
+                    borderColor: "#cece46",
+                    backgroundColor: "#ffffa5",
+                    fill: true
+                }]
+            }
 
             var myChart = new Chart(document.getElementById("myChartC"), {
                 type: 'line',
@@ -70,23 +92,28 @@ Vue.component('aktifitas', {
                     }
                 }
             });
-
+            var self = this;
             socket.on('data', function (response) {
-                console.log(response)
-                var i = 0;
-
-                for (var key in response) {
-                    data.labels[i] = response[i].waktu;
-                    data.datasets[0].data[i] = response[i].tegangan;
-                    data.datasets[1].data[i] = response[i].arus;
-                    data.datasets[2].data[i] = response[i].daya;
-                    i++;
+                // console.log(response)
+                var length = datachart.labels.length
+                if (length >= 20) {
+                    datachart.datasets[0].data.shift()
+                    datachart.datasets[1].data.shift()
+                    datachart.datasets[2].data.shift()
+                    datachart.labels.shift()
                 }
-
+                datachart.labels.push(response.waktu)
+                datachart.datasets[0].data.push(response.tegangan)
+                datachart.datasets[1].data.push(response.arus)
+                datachart.datasets[2].data.push(response.daya)
                 // Update chart
+                // console.log(datachart)
+                self.biaya()
+                self.realtime()
                 myChart.update();
             });
-
+        },
+        realtime() {
             axios
                 .get(urlapi + "/data/real", {
                     params: {
@@ -94,7 +121,7 @@ Vue.component('aktifitas', {
                     }
                 })
                 .then(response => {
-                    console.log(response)
+                    // console.log(response)
                     this.results = response.data.data
                     var labels = this.results.map(function (key) {
                         return key.waktu;
@@ -132,35 +159,39 @@ Vue.component('aktifitas', {
                         this.icondaya = "nc-icon nc-minimal-up text-danger";
                     }
                     //data
-                    data = {
-                        labels: labels.reverse(),
-                        datasets: [{
-                            data: dataarus.reverse(),
-                            label: "Arus",
-                            borderColor: "#ff8246",
-                            backgroundColor: "#ffc2a5",
-                            fill: false
-                        }, {
-                            data: datategangan.reverse(),
-                            label: "Tegangan",
-                            borderColor: "#6fc2d0",
-                            backgroundColor: "#d3f9ff",
-                            fill: false
-                        }, {
-                            data: datadaya.reverse(),
-                            label: "Daya",
-                            borderColor: "#cece46",
-                            backgroundColor: "#ffffa5",
-                            fill: true
-                        }]
-                    }
+                    // datachart = {
+                    //     labels: labels.reverse(),
+                    //     datasets: [{
+                    //         data: dataarus.reverse(),
+                    //         label: "Arus",
+                    //         borderColor: "#ff8246",
+                    //         backgroundColor: "#ffc2a5",
+                    //         fill: false
+                    //     }, {
+                    //         data: datategangan.reverse(),
+                    //         label: "Tegangan",
+                    //         borderColor: "#6fc2d0",
+                    //         backgroundColor: "#d3f9ff",
+                    //         fill: false
+                    //     }, {
+                    //         data: datadaya.reverse(),
+                    //         label: "Daya",
+                    //         borderColor: "#cece46",
+                    //         backgroundColor: "#ffffa5",
+                    //         fill: true
+                    //     }]
+                    // }
                 });
         }
     },
     mounted() {
         this.getspot()
-        this.biaya()
-        this.realtime()
+        setTimeout(() => {
+            this.realsocket()
+            this.realtime()
+            this.biaya()
+        }, 2000)
+        // this.realtime()
         // this.socketreal()
         // setInterval(() => {
         // this.realtime()

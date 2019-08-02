@@ -62,8 +62,8 @@
                 </div>
             </div>
             <div class="main-panel">
-                <!-- <nav class="navbar navbar-expand-lg navbar-absolute fixed-top">
-                    <div class="container-fluid">
+                <nav class="navbar navbar-expand-lg navbar-absolute fixed-top" style="width: 10px !important">
+                    <div class="container-fluid pl-1">
                         <div class="navbar-wrapper">
                             <div class="navbar-toggle">
                                 <button type="button" class="navbar-toggler">
@@ -74,7 +74,7 @@
                             </div>
                         </div>
                     </div>
-                </nav> -->
+                </nav>
                 <div class="content">
                     <keep-alive>
                         <component :is="halaman" transition="fade" transition-mode="out-in"></component>
@@ -86,7 +86,7 @@
     <template id="aktifitas">
         <div>
             <div class="dropdown float-right">
-                <select class="form-control" id='spotreal' class="btn btn-secondary">
+                <select class="form-control" id='spotreal' v-on:click="realtime" class="btn btn-secondary">
                     <option v-for="opti in optionspot" v-bind:value="opti.value">
                         {{ opti.text }}
                     </option>
@@ -107,7 +107,7 @@
                                 </div>
                                 <div class="col-7 col-md-8">
                                     <div class="numbers mr-2">
-                                        <p class="card-category">Tegangan</p>
+                                        <p class="card-category">Voltage</p>
                                         <p class="card-title">{{ totaltegangan }}
                                             <p>
                                     </div>
@@ -117,7 +117,7 @@
                         <div class="card-footer ">
                             <hr>
                             <div class="stats float-right">
-                                <i class="fa fa-refresh"></i> Voltage
+                                <i class="fa fa-refresh"></i> Tegangan (terakhir)
                             </div>
                         </div>
                     </div>
@@ -133,7 +133,7 @@
                                 </div>
                                 <div class="col-7 col-md-8">
                                     <div class="numbers mr-2">
-                                        <p class="card-category">Arus</p>
+                                        <p class="card-category">Ampere</p>
                                         <p class="card-title">{{ totalarus }}
                                             <p>
                                     </div>
@@ -143,7 +143,7 @@
                         <div class="card-footer ">
                             <hr>
                             <div class="stats float-right">
-                                <i class="fa fa-calendar-o"></i> Ampere
+                                <i class="fa fa-calendar-o"></i> Arus (terakhir)
                             </div>
                         </div>
                     </div>
@@ -159,7 +159,7 @@
                                 </div>
                                 <div class="col-7 col-md-8">
                                     <div class="numbers mr-2">
-                                        <p class="card-category">Daya</p>
+                                        <p class="card-category">Watt</p>
                                         <p class="card-title">{{ totaldaya }}
                                             <p>
                                     </div>
@@ -169,7 +169,7 @@
                         <div class="card-footer ">
                             <hr>
                             <div class="stats float-right">
-                                <i class="fa fa-clock-o"></i>Watt
+                                <i class="fa fa-clock-o"></i>Daya (terakhir)
                             </div>
                         </div>
                     </div>
@@ -185,7 +185,7 @@
                                 </div>
                                 <div class="col-7 col-md-8">
                                     <div class="numbers mr-2">
-                                        <p class="card-category">Biaya</p>
+                                        <p class="card-category">Rupiah</p>
                                         <p class="card-title"></p>{{ harga }}
                                         <p>
                                     </div>
@@ -195,7 +195,7 @@
                         <div class="card-footer ">
                             <hr>
                             <div class="stats float-right">
-                                <i class="fa fa-refresh"></i>Rupiah
+                                <i class="fa fa-refresh"></i>Biaya (hari ini)
                             </div>
                         </div>
                     </div>
